@@ -5,6 +5,7 @@ import {useGameLoop} from '../../hooks/useGameLoop';
 import {useKeyboardInput} from '../../hooks/useKeyboardInput';
 import {updatePlayerState} from '../../game/physics';
 import {draw} from '../../game/draw'; // 1. Импортируем нашу новую функцию отрисовки
+import {PLAYER_DIMENSIONS} from '../../game/collision';
 import levelData from '../../levels/level1.json';
 import './Game.css';
 
@@ -37,8 +38,16 @@ const Game = () => {
 		if (platforms.length === 0) return;
 
 		// --- Логика игры остается прежней ---
-		const player = playerRef.current;
-		playerRef.current = updatePlayerState(player, input, platforms);
+                const player = playerRef.current;
+                playerRef.current = updatePlayerState(player, input, platforms);
+
+                // Prevent the player from leaving the game area horizontally
+                if (playerRef.current.x < 0) {
+                        playerRef.current.x = 0;
+                }
+                if (playerRef.current.x > GAME_WIDTH - PLAYER_DIMENSIONS.width) {
+                        playerRef.current.x = GAME_WIDTH - PLAYER_DIMENSIONS.width;
+                }
 
 		// Возвращение игрока при падении
 		if (playerRef.current.y > GAME_HEIGHT) {
