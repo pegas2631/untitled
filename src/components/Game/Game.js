@@ -13,9 +13,12 @@ import './Game.css';
 
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 600;
+const WORLD_WIDTH = 2000;
 
 const Game = () => {
-	const canvasRef = useRef(null); // 2. Ref для доступа к элементу <canvas>
+        const canvasRef = useRef(null); // 2. Ref для доступа к элементу <canvas>
+
+        const cameraRef = useRef(0);
 
 	const playerRef = useRef({
 		x: 100,
@@ -25,7 +28,7 @@ const Game = () => {
 	});
 
 	// `playerPosition` state больше не нужен, так как мы не передаем его в дочерний компонент
-	const [platforms, setPlatforms] = useState([]);
+        const [platforms, setPlatforms] = useState([]);
 	const input = useKeyboardInput();
 
 	useEffect(() => {
@@ -41,13 +44,18 @@ const Game = () => {
                 const player = playerRef.current;
                 playerRef.current = updatePlayerState(player, input, platforms);
 
-                // Prevent the player from leaving the game area horizontally
+                // Prevent the player from leaving the world boundaries
                 if (playerRef.current.x < 0) {
                         playerRef.current.x = 0;
                 }
-                if (playerRef.current.x > GAME_WIDTH - PLAYER_DIMENSIONS.width) {
-                        playerRef.current.x = GAME_WIDTH - PLAYER_DIMENSIONS.width;
+                if (playerRef.current.x > WORLD_WIDTH - PLAYER_DIMENSIONS.width) {
+                        playerRef.current.x = WORLD_WIDTH - PLAYER_DIMENSIONS.width;
                 }
+
+                // Update camera position to follow the player
+                const targetCamera = playerRef.current.x - GAME_WIDTH / 2 + PLAYER_DIMENSIONS.width / 2;
+                const maxCamera = WORLD_WIDTH - GAME_WIDTH;
+                cameraRef.current = Math.max(0, Math.min(targetCamera, maxCamera));
 
 		// Возвращение игрока при падении
 		if (playerRef.current.y > GAME_HEIGHT) {
@@ -62,9 +70,9 @@ const Game = () => {
 		const context = canvas.getContext('2d');
 		if (!context) return;
 
-		// 3. Вызываем нашу функцию отрисовки на каждом кадре
-		draw(context, playerRef.current, platforms);
-	});
+                // 3. Вызываем нашу функцию отрисовки на каждом кадре
+                draw(context, playerRef.current, platforms, cameraRef.current);
+        });
 
 	// 4. Рендерим только один <canvas> элемент
 	return (
