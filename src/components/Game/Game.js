@@ -14,11 +14,12 @@ import './Game.css';
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 600;
 const WORLD_WIDTH = 2000;
+// Высота мира не ограничена снизу, но камера не двигается ниже 0
 
 const Game = () => {
         const canvasRef = useRef(null); // 2. Ref для доступа к элементу <canvas>
 
-        const cameraRef = useRef(0);
+        const cameraRef = useRef({x: 0, y: 0});
 
 	const playerRef = useRef({
 		x: 100,
@@ -53,12 +54,16 @@ const Game = () => {
                 }
 
                 // Update camera position to follow the player
-                const targetCamera = playerRef.current.x - GAME_WIDTH / 2 + PLAYER_DIMENSIONS.width / 2;
-                const maxCamera = WORLD_WIDTH - GAME_WIDTH;
-                cameraRef.current = Math.max(0, Math.min(targetCamera, maxCamera));
+                const targetCameraX = playerRef.current.x - GAME_WIDTH / 2 + PLAYER_DIMENSIONS.width / 2;
+                const maxCameraX = WORLD_WIDTH - GAME_WIDTH;
+                cameraRef.current.x = Math.max(0, Math.min(targetCameraX, maxCameraX));
 
-		// Возвращение игрока при падении
-		if (playerRef.current.y > GAME_HEIGHT) {
+                const targetCameraY = playerRef.current.y - GAME_HEIGHT / 2 + PLAYER_DIMENSIONS.height / 2;
+                // camera moves only upwards (negative y), never below zero
+                cameraRef.current.y = Math.min(targetCameraY, 0);
+
+                // Возвращение игрока при падении
+                if (playerRef.current.y - cameraRef.current.y > GAME_HEIGHT) {
 			playerRef.current.x = 100;
 			playerRef.current.y = 100;
 			playerRef.current.yVelocity = 0;

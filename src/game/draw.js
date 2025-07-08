@@ -11,9 +11,14 @@ const PLATFORM_HEIGHT = 20;
  * @param {CanvasRenderingContext2D} ctx - 2D-контекст холста.
  * @param {object} player - Состояние игрока { x, y }.
  */
-function drawPlayer(ctx, player, cameraX = 0) {
-        ctx.fillStyle = PLAYER_COLOR;
-        ctx.fillRect(player.x - cameraX, player.y, PLAYER_DIMENSIONS.width, PLAYER_DIMENSIONS.height);
+function drawPlayer(ctx, player, camera = {x: 0, y: 0}) {
+    ctx.fillStyle = PLAYER_COLOR;
+    ctx.fillRect(
+        player.x - camera.x,
+        player.y - camera.y,
+        PLAYER_DIMENSIONS.width,
+        PLAYER_DIMENSIONS.height
+    );
 }
 
 /**
@@ -21,10 +26,14 @@ function drawPlayer(ctx, player, cameraX = 0) {
  * @param {CanvasRenderingContext2D} ctx - 2D-контекст холста.
  * @param {object} platform - Данные платформы { x, y, width }.
  */
-function drawPlatform(ctx, platform, cameraX = 0)
-{
-        ctx.fillStyle = PLATFORM_COLOR;
-        ctx.fillRect(platform.x - cameraX, platform.y, platform.width, PLATFORM_HEIGHT);
+function drawPlatform(ctx, platform, camera = {x: 0, y: 0}) {
+    ctx.fillStyle = PLATFORM_COLOR;
+    ctx.fillRect(
+        platform.x - camera.x,
+        platform.y - camera.y,
+        platform.width,
+        PLATFORM_HEIGHT
+    );
 }
 
 /**
@@ -33,12 +42,12 @@ function drawPlatform(ctx, platform, cameraX = 0)
  * @param {object} playerState - Полное состояние игрока.
  * @param {array} platforms - Массив всех платформ.
  */
-export function draw(ctx, playerState, platforms, cameraX = 0)
-{
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+export function draw(ctx, playerState, platforms, camera = {x: 0, y: 0}) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        for (const platform of platforms) {
-                drawPlatform(ctx, platform, cameraX);
-        }
+    for (const platform of platforms) {
+        drawPlatform(ctx, platform, camera);
+    }
 
-        drawPlayer(ctx, playerState, cameraX);}
+    drawPlayer(ctx, playerState, camera);
+}
