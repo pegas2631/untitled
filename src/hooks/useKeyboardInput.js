@@ -32,5 +32,4 @@ export const useKeyboardInput = () => {
 		};
 	}, []); // Пустой массив зависимостей гарантирует, что эффект выполнится только один раз
 
-	return input;
-};
+	return input;};

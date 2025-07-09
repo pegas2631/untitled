@@ -10,6 +10,7 @@ import {checkEnemyCollision} from '../../game/enemies';
 import levelData from '../../levels/level1.json';
 import coinData from '../../levels/coins1.json';
 import enemyData from '../../levels/enemies1.json';
+import Scoreboard from '../UI/Scoreboard';
 import './Game.css';
 
 // Удаляем импорты Player и Platform, они больше не нужны
@@ -142,16 +143,17 @@ const Game = () => {
 	});
 
 	// 4. Рендерим <canvas> и HUD
-	return (
-		<div className="game-container">
-			<canvas
-				ref={canvasRef}
-				width={GAME_WIDTH}
-				height={GAME_HEIGHT}
-				className="game-canvas"
-			/>
-		</div>
-	);
+        return (
+                <div className="game-container">
+                        <Scoreboard coins={coinsCollected} />
+                        <canvas
+                                ref={canvasRef}
+                                width={GAME_WIDTH}
+                                height={GAME_HEIGHT}
+                                className="game-canvas"
+                        />
+                </div>
+        );
 };
 
 export default Game;

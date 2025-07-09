@@ -58,5 +58,4 @@ export const updatePlayerState = (player, input, platforms) => {
 		newPlayerState.isGrounded = false;
 	}
 
-	return newPlayerState;
-};
+	return newPlayerState;};
