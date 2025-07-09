@@ -9,7 +9,6 @@ import {PLAYER_DIMENSIONS} from '../../game/collision';
 import levelData from '../../levels/level1.json';
 import coinData from '../../levels/coins1.json';
 import './Game.css';
-import Scoreboard from '../UI/Scoreboard';
 
 // Удаляем импорты Player и Platform, они больше не нужны
 
@@ -112,7 +111,14 @@ const Game = () => {
                 if (!context) return;
 
                 // 3. Вызываем нашу функцию отрисовки на каждом кадре
-                draw(context, playerRef.current, platforms, coins, cameraRef.current);
+                draw(
+                        context,
+                        playerRef.current,
+                        platforms,
+                        coins,
+                        cameraRef.current,
+                        coinsCollected
+                );
         });
 
         // 4. Рендерим <canvas> и HUD
@@ -124,7 +130,6 @@ const Game = () => {
                                 height={GAME_HEIGHT}
                                 className="game-canvas"
                         />
-                        <Scoreboard coins={coinsCollected} />
                 </div>
         );
 };
