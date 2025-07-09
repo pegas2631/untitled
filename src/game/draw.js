@@ -11,6 +11,9 @@ const PLATFORM_COLOR = '#6d4c41';
 const PLATFORM_HEIGHT = 20;
 const COIN_COLOR = '#fdd835';
 const COIN_RADIUS = 10;
+const HEALTH_RADIUS = 20;
+const HEALTH_BG_COLOR = 'rgba(0,0,0,0.3)';
+const HEALTH_COLOR = '#e53935';
 
 /**
  * Рисует игрока на холсте.
@@ -59,6 +62,30 @@ function drawCoin(ctx, coin, camera = {x: 0, y: 0}) {
     ctx.fill();
 }
 
+function drawHealth(ctx, health, maxHealth) {
+    const ratio = Math.max(0, Math.min(health / maxHealth, 1));
+    const x = HEALTH_RADIUS + 10;
+    const y = HEALTH_RADIUS + 10;
+
+    ctx.fillStyle = HEALTH_BG_COLOR;
+    ctx.beginPath();
+    ctx.arc(x, y, HEALTH_RADIUS, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = HEALTH_COLOR;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.arc(
+        x,
+        y,
+        HEALTH_RADIUS,
+        -Math.PI / 2,
+        -Math.PI / 2 + Math.PI * 2 * ratio
+    );
+    ctx.lineTo(x, y);
+    ctx.fill();
+}
+
 /**
  * Главная функция отрисовки, которая очищает холст и рисует все объекты.
  * @param {CanvasRenderingContext2D} ctx - 2D-контекст холста.
@@ -77,4 +104,8 @@ export function draw(ctx, playerState, platforms, coins = [], camera = {x: 0, y:
     }
 
     drawPlayer(ctx, playerState, camera);
+
+    if (playerState && typeof playerState.health === 'number' && typeof playerState.maxHealth === 'number') {
+        drawHealth(ctx, playerState.health, playerState.maxHealth);
+    }
 }
