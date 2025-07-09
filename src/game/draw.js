@@ -15,6 +15,8 @@ const COIN_RADIUS = 10;
 const HEALTH_RADIUS = 20;
 const HEALTH_BG_COLOR = 'rgba(0,0,0,0.3)';
 const HEALTH_COLOR = '#e53935';
+const TEXT_COLOR = '#000';
+const FONT_SIZE = 20;
 
 /**
  * Рисует игрока на холсте.
@@ -87,13 +89,28 @@ function drawHealth(ctx, health, maxHealth) {
     ctx.fill();
 }
 
+function drawCoinCount(ctx, count) {
+    ctx.fillStyle = TEXT_COLOR;
+    ctx.font = `${FONT_SIZE}px sans-serif`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText(`\uD83E\uDE99 ${count}`, ctx.canvas.width - 10, 10);
+}
+
 /**
  * Главная функция отрисовки, которая очищает холст и рисует все объекты.
  * @param {CanvasRenderingContext2D} ctx - 2D-контекст холста.
  * @param {object} playerState - Полное состояние игрока.
  * @param {array} platforms - Массив всех платформ.
  */
-export function draw(ctx, playerState, platforms, coins = [], enemies = [], camera = {x: 0, y: 0}) {
+export function draw(
+    ctx,
+    playerState,
+    platforms,
+    coins = [],
+    camera = {x: 0, y: 0},
+    coinCount = 0
+) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     for (const platform of platforms) {
@@ -111,4 +128,6 @@ export function draw(ctx, playerState, platforms, coins = [], enemies = [], came
     if (playerState && typeof playerState.health === 'number' && typeof playerState.maxHealth === 'number') {
         drawHealth(ctx, playerState.health, playerState.maxHealth);
     }
+
+    drawCoinCount(ctx, coinCount);
 }
