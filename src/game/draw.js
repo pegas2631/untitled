@@ -92,11 +92,16 @@ function drawHealth(ctx, health, maxHealth) {
 }
 
 function drawCoinCount(ctx, count) {
+    const coinX = ctx.canvas.width - COIN_RADIUS - 10;
+    const coinY = COIN_RADIUS + 10;
+
+    drawCoin(ctx, { x: coinX, y: coinY });
+
     ctx.fillStyle = TEXT_COLOR;
     ctx.font = `${FONT_SIZE}px sans-serif`;
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'top';
-    ctx.fillText(`\uD83E\uDE99 ${count}`, ctx.canvas.width - 10, 10);
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`${count}`, coinX + COIN_RADIUS + 5, coinY);
 }
 
 /**
