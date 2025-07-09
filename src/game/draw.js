@@ -1,6 +1,7 @@
 // src/game/draw.js
 
 import {PLAYER_DIMENSIONS} from './collision';
+import {drawEnemies} from './enemies';
 import playerSpritePath from '../assets/sprites/player.svg';
 
 const playerImage = new Image();
@@ -92,7 +93,7 @@ function drawHealth(ctx, health, maxHealth) {
  * @param {object} playerState - Полное состояние игрока.
  * @param {array} platforms - Массив всех платформ.
  */
-export function draw(ctx, playerState, platforms, coins = [], camera = {x: 0, y: 0}) {
+export function draw(ctx, playerState, platforms, coins = [], enemies = [], camera = {x: 0, y: 0}) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     for (const platform of platforms) {
@@ -102,6 +103,8 @@ export function draw(ctx, playerState, platforms, coins = [], camera = {x: 0, y:
     for (const coin of coins) {
         drawCoin(ctx, coin, camera);
     }
+
+    drawEnemies(ctx, enemies, camera);
 
     drawPlayer(ctx, playerState, camera);
 
