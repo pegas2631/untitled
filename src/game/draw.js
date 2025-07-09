@@ -5,6 +5,8 @@ import {PLAYER_DIMENSIONS} from './collision';
 const PLAYER_COLOR = '#e53935';
 const PLATFORM_COLOR = '#6d4c41';
 const PLATFORM_HEIGHT = 20;
+const COIN_COLOR = '#fdd835';
+const COIN_RADIUS = 10;
 
 /**
  * Рисует игрока на холсте.
@@ -36,17 +38,28 @@ function drawPlatform(ctx, platform, camera = {x: 0, y: 0}) {
     );
 }
 
+function drawCoin(ctx, coin, camera = {x: 0, y: 0}) {
+    ctx.fillStyle = COIN_COLOR;
+    ctx.beginPath();
+    ctx.arc(coin.x - camera.x, coin.y - camera.y, COIN_RADIUS, 0, Math.PI * 2);
+    ctx.fill();
+}
+
 /**
  * Главная функция отрисовки, которая очищает холст и рисует все объекты.
  * @param {CanvasRenderingContext2D} ctx - 2D-контекст холста.
  * @param {object} playerState - Полное состояние игрока.
  * @param {array} platforms - Массив всех платформ.
  */
-export function draw(ctx, playerState, platforms, camera = {x: 0, y: 0}) {
+export function draw(ctx, playerState, platforms, coins = [], camera = {x: 0, y: 0}) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     for (const platform of platforms) {
         drawPlatform(ctx, platform, camera);
+    }
+
+    for (const coin of coins) {
+        drawCoin(ctx, coin, camera);
     }
 
     drawPlayer(ctx, playerState, camera);
