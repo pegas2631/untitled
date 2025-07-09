@@ -19,5 +19,4 @@ export const useGameLoop = (callback) => {
 
 		requestRef.current = requestAnimationFrame(animate);
 		return () => cancelAnimationFrame(requestRef.current);
-	}, []);
-};
+	}, []);};
