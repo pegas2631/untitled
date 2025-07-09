@@ -1,6 +1,7 @@
 // src/game/draw.js
 
 import {PLAYER_DIMENSIONS} from './collision';
+import {drawEnemies} from './enemies';
 import playerSpritePath from '../assets/sprites/player.svg';
 
 const playerImage = new Image();
@@ -119,6 +120,8 @@ export function draw(
     for (const coin of coins) {
         drawCoin(ctx, coin, camera);
     }
+
+    drawEnemies(ctx, enemies, camera);
 
     drawPlayer(ctx, playerState, camera);
 

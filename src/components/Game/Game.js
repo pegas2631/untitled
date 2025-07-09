@@ -6,8 +6,10 @@ import {useKeyboardInput} from '../../hooks/useKeyboardInput';
 import {updatePlayerState} from '../../game/physics';
 import {draw} from '../../game/draw';
 import {PLAYER_DIMENSIONS} from '../../game/collision';
+import {checkEnemyCollision} from '../../game/enemies';
 import levelData from '../../levels/level1.json';
 import coinData from '../../levels/coins1.json';
+import enemyData from '../../levels/enemies1.json';
 import './Game.css';
 
 // Удаляем импорты Player и Platform, они больше не нужны
@@ -17,6 +19,7 @@ const GAME_HEIGHT = 600;
 const WORLD_WIDTH = 2000;
 const COIN_RADIUS = 10;
 const MAX_HEALTH = 5;
+const DAMAGE_COOLDOWN = 1000;
 // Высота мира не ограничена снизу, но камера не двигается ниже 0
 
 const Game = () => {
@@ -31,13 +34,15 @@ const Game = () => {
                 isGrounded: false,
                 health: MAX_HEALTH,
                 maxHealth: MAX_HEALTH,
+                lastHit: 0,
         });
 
 	// `playerPosition` state больше не нужен, так как мы не передаем его в дочерний компонент
         const [platforms, setPlatforms] = useState([]);
         const [coins, setCoins] = useState([]);
+        const [enemies, setEnemies] = useState([]);
         const [coinsCollected, setCoinsCollected] = useState(0);
-	const input = useKeyboardInput();
+        const input = useKeyboardInput();
 
         useEffect(() => {
                 if (levelData && Array.isArray(levelData)) {
@@ -45,6 +50,9 @@ const Game = () => {
                 }
                 if (coinData && Array.isArray(coinData)) {
                         setCoins(coinData);
+                }
+                if (enemyData && Array.isArray(enemyData)) {
+                        setEnemies(enemyData);
                 }
         }, []);
 
@@ -105,19 +113,28 @@ const Game = () => {
                         }
                 }
 
+                // Проверяем столкновение с врагами
+                const now = Date.now();
+                const hitEnemy = checkEnemyCollision(playerRef.current, enemies);
+                if (hitEnemy && now - playerRef.current.lastHit > DAMAGE_COOLDOWN) {
+                        playerRef.current.health = Math.max(0, playerRef.current.health - 1);
+                        playerRef.current.lastHit = now;
+                }
+
                 // --- Новая логика отрисовки ---
                 const canvas = canvasRef.current;
                 const context = canvas.getContext('2d');
                 if (!context) return;
 
-                // 3. Вызываем нашу функцию отрисовки на каждом кадре
+           
                 draw(
-                        context,
-                        playerRef.current,
-                        platforms,
-                        coins,
-                        cameraRef.current,
-                        coinsCollected
+                      context, 
+                     playerRef.current, 
+                     platforms, 
+                     coins, 
+                     enemies, 
+                     cameraRef.current
+                     cameraRef.current
                 );
         });
 
