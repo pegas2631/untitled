@@ -119,11 +119,16 @@ const Game = () => {
 
 		// Проверяем столкновение с врагами
 		const now = Date.now();
-		const hitEnemy = checkEnemyCollision(playerRef.current, enemies);
-		if (hitEnemy && now - playerRef.current.lastHit > DAMAGE_COOLDOWN) {
-			playerRef.current.health = Math.max(0, playerRef.current.health - 1);
-			playerRef.current.lastHit = now;
-		}
+                const hitEnemy = checkEnemyCollision(playerRef.current, enemies);
+                if (hitEnemy && now - playerRef.current.lastHit > DAMAGE_COOLDOWN) {
+                        playerRef.current.health = Math.max(0, playerRef.current.health - 1);
+                        playerRef.current.lastHit = now;
+                }
+
+                if (playerRef.current.health <= 0) {
+                        window.location.reload();
+                        return;
+                }
 
 		// --- Новая логика отрисовки ---
 		const canvas = canvasRef.current;
