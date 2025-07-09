@@ -17,6 +17,7 @@ const GAME_WIDTH = 800;
 const GAME_HEIGHT = 600;
 const WORLD_WIDTH = 2000;
 const COIN_RADIUS = 10;
+const MAX_HEALTH = 5;
 // Высота мира не ограничена снизу, но камера не двигается ниже 0
 
 const Game = () => {
@@ -24,12 +25,14 @@ const Game = () => {
 
         const cameraRef = useRef({x: 0, y: 0});
 
-	const playerRef = useRef({
-		x: 100,
-		y: 100,
-		yVelocity: 0,
-		isGrounded: false,
-	});
+        const playerRef = useRef({
+                x: 100,
+                y: 100,
+                yVelocity: 0,
+                isGrounded: false,
+                health: MAX_HEALTH,
+                maxHealth: MAX_HEALTH,
+        });
 
 	// `playerPosition` state больше не нужен, так как мы не передаем его в дочерний компонент
         const [platforms, setPlatforms] = useState([]);
