@@ -1,9 +1,9 @@
+import { PLAYER_DIMENSIONS } from './collision';
+
 export const ENEMY_DIMENSIONS = {
     width: 40,
     height: 40,
 };
-
-import { PLAYER_DIMENSIONS } from './collision';
 
 export function drawEnemy(ctx, enemy, camera = {x: 0, y: 0}) {
     ctx.fillStyle = '#000';

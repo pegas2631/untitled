@@ -37,7 +37,6 @@ const Game = () => {
                 lastHit: 0,
         });
 
-	// `playerPosition` state больше не нужен, так как мы не передаем его в дочерний компонент
         const [platforms, setPlatforms] = useState([]);
         const [coins, setCoins] = useState([]);
         const [enemies, setEnemies] = useState([]);
@@ -86,24 +85,29 @@ const Game = () => {
                 cameraRef.current.y = Math.min(targetCameraY, 0);
 
                 // Возвращение игрока при падении
-                if (playerRef.current.y - cameraRef.current.y > GAME_HEIGHT) {
-			playerRef.current.x = 100;
-			playerRef.current.y = 100;
-			playerRef.current.yVelocity = 0;
-			playerRef.current.isGrounded = false;
-		}
+                if (playerRef.current.y - cameraRef.current.y > GAME_HEIGHT)
+                {
+                    playerRef.current.x = 100;
+                    playerRef.current.y = 100;
+                    playerRef.current.yVelocity = 0;
+                    playerRef.current.isGrounded = false;
+		        }
 
                 // Проверяем столкновение с монетами
                 if (coins.length > 0) {
                         const remaining = [];
                         let collected = 0;
-                        for (const coin of coins) {
+                        for (const coin of coins)
+                        {
                                 const dx = playerRef.current.x + PLAYER_DIMENSIONS.width / 2 - coin.x;
                                 const dy = playerRef.current.y + PLAYER_DIMENSIONS.height / 2 - coin.y;
                                 const distance = Math.hypot(dx, dy);
-                                if (distance < COIN_RADIUS + PLAYER_DIMENSIONS.width / 2) {
+                                if (distance < COIN_RADIUS + PLAYER_DIMENSIONS.width / 2)
+                                {
                                         collected += 1;
-                                } else {
+                                }
+                                else
+                                {
                                         remaining.push(coin);
                                 }
                         }
@@ -128,13 +132,12 @@ const Game = () => {
 
            
                 draw(
-                      context, 
+                     context,
                      playerRef.current, 
                      platforms, 
                      coins, 
                      enemies, 
-                     cameraRef.current
-                     cameraRef.current
+                     cameraRef.current,
                 );
         });
 

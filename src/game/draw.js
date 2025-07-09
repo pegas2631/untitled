@@ -22,6 +22,7 @@ const FONT_SIZE = 20;
  * Рисует игрока на холсте.
  * @param {CanvasRenderingContext2D} ctx - 2D-контекст холста.
  * @param {object} player - Состояние игрока { x, y }.
+ * @param camera
  */
 function drawPlayer(ctx, player, camera = {x: 0, y: 0}) {
     if (playerImage.complete) {
@@ -47,6 +48,7 @@ function drawPlayer(ctx, player, camera = {x: 0, y: 0}) {
  * Рисует одну платформу на холсте.
  * @param {CanvasRenderingContext2D} ctx - 2D-контекст холста.
  * @param {object} platform - Данные платформы { x, y, width }.
+ * @param camera
  */
 function drawPlatform(ctx, platform, camera = {x: 0, y: 0}) {
     ctx.fillStyle = PLATFORM_COLOR;
@@ -102,12 +104,17 @@ function drawCoinCount(ctx, count) {
  * @param {CanvasRenderingContext2D} ctx - 2D-контекст холста.
  * @param {object} playerState - Полное состояние игрока.
  * @param {array} platforms - Массив всех платформ.
+ * @param coins
+ * @param enemies
+ * @param camera
+ * @param coinCount
  */
 export function draw(
     ctx,
     playerState,
     platforms,
     coins = [],
+    enemies = [],
     camera = {x: 0, y: 0},
     coinCount = 0
 ) {
