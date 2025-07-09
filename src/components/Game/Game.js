@@ -45,12 +45,17 @@ const Game = () => {
                 const player = playerRef.current;
                 playerRef.current = updatePlayerState(player, input, platforms);
 
-                // Prevent the player from leaving the world boundaries
-                if (playerRef.current.x < 0) {
-                        playerRef.current.x = 0;
-                }
+                // Prevent the player from going beyond the right boundary
                 if (playerRef.current.x > WORLD_WIDTH - PLAYER_DIMENSIONS.width) {
                         playerRef.current.x = WORLD_WIDTH - PLAYER_DIMENSIONS.width;
+                }
+
+                // Respawn игрока, если он ушёл слишком далеко влево
+                if (playerRef.current.x < -50) {
+                        playerRef.current.x = 100;
+                        playerRef.current.y = 100;
+                        playerRef.current.yVelocity = 0;
+                        playerRef.current.isGrounded = false;
                 }
 
                 // Update camera position to follow the player
