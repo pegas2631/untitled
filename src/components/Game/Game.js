@@ -10,7 +10,6 @@ import {checkEnemyCollision} from '../../game/enemies';
 import levelData from '../../levels/level1.json';
 import coinData from '../../levels/coins1.json';
 import enemyData from '../../levels/enemies1.json';
-import Scoreboard from '../UI/Scoreboard';
 import './Game.css';
 
 // Удаляем импорты Player и Platform, они больше не нужны
@@ -132,20 +131,20 @@ const Game = () => {
 		if (!context) return;
 
 
-		draw(
-			context,
-			playerRef.current,
-			platforms,
-			coins,
-			enemies,
-			cameraRef.current,
-		);
+                draw(
+                        context,
+                        playerRef.current,
+                        platforms,
+                        coins,
+                        enemies,
+                        cameraRef.current,
+                        coinsCollected,
+                );
 	});
 
 	// 4. Рендерим <canvas> и HUD
         return (
                 <div className="game-container">
-                        <Scoreboard coins={coinsCollected} />
                         <canvas
                                 ref={canvasRef}
                                 width={GAME_WIDTH}
