@@ -3,9 +3,13 @@
 import {PLAYER_DIMENSIONS} from './collision';
 import {drawEnemies} from './enemies';
 import playerSpritePath from '../assets/sprites/player.svg';
+import coinSpritePath from '../assets/sprites/coin.svg';
 
 const playerImage = new Image();
 playerImage.src = playerSpritePath;
+
+const coinImage = new Image();
+coinImage.src = coinSpritePath;
 
 const PLAYER_COLOR = '#e53935';
 const PLATFORM_COLOR = '#6d4c41';
@@ -61,10 +65,17 @@ function drawPlatform(ctx, platform, camera = {x: 0, y: 0}) {
 }
 
 function drawCoin(ctx, coin, camera = {x: 0, y: 0}) {
-    ctx.fillStyle = COIN_COLOR;
-    ctx.beginPath();
-    ctx.arc(coin.x - camera.x, coin.y - camera.y, COIN_RADIUS, 0, Math.PI * 2);
-    ctx.fill();
+    const x = coin.x - camera.x - COIN_RADIUS;
+    const y = coin.y - camera.y - COIN_RADIUS;
+
+    if (coinImage.complete) {
+        ctx.drawImage(coinImage, x, y, COIN_RADIUS * 2, COIN_RADIUS * 2);
+    } else {
+        ctx.fillStyle = COIN_COLOR;
+        ctx.beginPath();
+        ctx.arc(coin.x - camera.x, coin.y - camera.y, COIN_RADIUS, 0, Math.PI * 2);
+        ctx.fill();
+    }
 }
 
 function drawHealth(ctx, health, maxHealth) {
@@ -92,16 +103,19 @@ function drawHealth(ctx, health, maxHealth) {
 }
 
 function drawCoinCount(ctx, count) {
-    const coinX = ctx.canvas.width - COIN_RADIUS - 10;
+    ctx.font = `${FONT_SIZE}px sans-serif`;
+    const text = `${count}`;
+    const textWidth = ctx.measureText(text).width;
+
+    const coinX = ctx.canvas.width - COIN_RADIUS - textWidth - 20;
     const coinY = COIN_RADIUS + 10;
 
     drawCoin(ctx, { x: coinX, y: coinY });
 
     ctx.fillStyle = TEXT_COLOR;
-    ctx.font = `${FONT_SIZE}px sans-serif`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText(`${count}`, coinX + COIN_RADIUS + 5, coinY);
+    ctx.fillText(text, coinX + COIN_RADIUS + 5, coinY);
 }
 
 /**
