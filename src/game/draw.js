@@ -1,6 +1,10 @@
 // src/game/draw.js
 
 import {PLAYER_DIMENSIONS} from './collision';
+import playerSpritePath from '../assets/sprites/player.svg';
+
+const playerImage = new Image();
+playerImage.src = playerSpritePath;
 
 const PLAYER_COLOR = '#e53935';
 const PLATFORM_COLOR = '#6d4c41';
@@ -12,13 +16,23 @@ const PLATFORM_HEIGHT = 20;
  * @param {object} player - Состояние игрока { x, y }.
  */
 function drawPlayer(ctx, player, camera = {x: 0, y: 0}) {
-    ctx.fillStyle = PLAYER_COLOR;
-    ctx.fillRect(
-        player.x - camera.x,
-        player.y - camera.y,
-        PLAYER_DIMENSIONS.width,
-        PLAYER_DIMENSIONS.height
-    );
+    if (playerImage.complete) {
+        ctx.drawImage(
+            playerImage,
+            player.x - camera.x,
+            player.y - camera.y,
+            PLAYER_DIMENSIONS.width,
+            PLAYER_DIMENSIONS.height
+        );
+    } else {
+        ctx.fillStyle = PLAYER_COLOR;
+        ctx.fillRect(
+            player.x - camera.x,
+            player.y - camera.y,
+            PLAYER_DIMENSIONS.width,
+            PLAYER_DIMENSIONS.height
+        );
+    }
 }
 
 /**
