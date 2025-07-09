@@ -7,10 +7,22 @@ import {updatePlayerState} from '../../game/physics';
 import {draw} from '../../game/draw';
 import {PLAYER_DIMENSIONS} from '../../game/collision';
 import {checkEnemyCollision} from '../../game/enemies';
-import levelData from '../../levels/level1.json';
-import coinData from '../../levels/coins1.json';
-import enemyData from '../../levels/enemies1.json';
+import level1 from '../../levels/level1.json';
+import coins1 from '../../levels/coins1.json';
+import enemies1 from '../../levels/enemies1.json';
+import level2 from '../../levels/level2.json';
+import coins2 from '../../levels/coins2.json';
+import enemies2 from '../../levels/enemies2.json';
+import level3 from '../../levels/level3.json';
+import coins3 from '../../levels/coins3.json';
+import enemies3 from '../../levels/enemies3.json';
 import './Game.css';
+
+const LEVELS = [
+    { level: level1, coins: coins1, enemies: enemies1 },
+    { level: level2, coins: coins2, enemies: enemies2 },
+    { level: level3, coins: coins3, enemies: enemies3 },
+];
 
 // Удаляем импорты Player и Platform, они больше не нужны
 
@@ -37,23 +49,41 @@ const Game = () => {
 		lastHit: 0,
 	});
 
-	const [platforms, setPlatforms] = useState([]);
-	const [coins, setCoins] = useState([]);
-	const [enemies, setEnemies] = useState([]);
-	const [coinsCollected, setCoinsCollected] = useState(0);
-	const input = useKeyboardInput();
+        const [platforms, setPlatforms] = useState([]);
+        const [coins, setCoins] = useState([]);
+        const [enemies, setEnemies] = useState([]);
+        const [coinsCollected, setCoinsCollected] = useState(0);
+        const [currentLevel, setCurrentLevel] = useState(0);
+        const input = useKeyboardInput();
 
-	useEffect(() => {
-		if (levelData && Array.isArray(levelData)) {
-			setPlatforms(levelData);
-		}
-		if (coinData && Array.isArray(coinData)) {
-			setCoins(coinData);
-		}
-		if (enemyData && Array.isArray(enemyData)) {
-			setEnemies(enemyData);
-		}
-	}, []);
+        const loadLevel = (index) => {
+                const data = LEVELS[index % LEVELS.length];
+                setPlatforms(data.level);
+                setCoins(data.coins);
+                setEnemies(data.enemies);
+                setCoinsCollected(0);
+                playerRef.current = {
+                        x: 100,
+                        y: 100,
+                        yVelocity: 0,
+                        isGrounded: false,
+                        health: MAX_HEALTH,
+                        maxHealth: MAX_HEALTH,
+                        lastHit: 0,
+                };
+                cameraRef.current = { x: 0, y: 0 };
+        };
+
+        useEffect(() => {
+                loadLevel(currentLevel);
+        }, [currentLevel]);
+
+        useEffect(() => {
+                if (coins.length === 0 && platforms.length > 0) {
+                        alert('\u041F\u043E\u0437\u0434\u0440\u0430\u0432\u043B\u044F\u0435\u043C! \u0423\u0440\u043E\u0432\u0435\u043D\u044C \u043F\u0440\u043E\u0439\u0434\u0435\u043D!');
+                        setCurrentLevel(prev => (prev + 1) % LEVELS.length);
+                }
+        }, [coins, platforms]);
 
 	useGameLoop(() => {
 		if (platforms.length === 0) return;
